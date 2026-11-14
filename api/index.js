@@ -1,17 +1,12 @@
-// Vercel serverless entry: wraps the Express app and reuses the Mongo connection across invocations.
-import mongoose from 'mongoose';
-import config from '../server/src/config.js';
+// Optional legacy Vercel serverless entrypoint. The `services` config in
+// vercel.json deploys server/ (entry: server/src/app.js) instead, but this file
+// stays consistent in case a project is configured to use it.
+import { connectDb } from '../server/src/db.js';
 import app from '../server/src/app.js';
 
-let connecting;
-
 export default async function handler(req, res) {
-  connecting ??= mongoose.connect(config.mongoUri).catch((err) => {
-    connecting = undefined; // allow a retry on the next request
-    throw err;
-  });
   try {
-    await connecting;
+    await connectDb();
   } catch {
     return res.status(503).json({ message: 'Database unavailable' });
   }
