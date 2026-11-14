@@ -7,11 +7,22 @@
     },
     "server": {
       "root": "server",
-      "framework": "express"
+      "framework": "express",
+      "bindings": []
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": { "service": "server" } },
-    { "source": "/(.*)", "destination": { "service": "client" } }
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "server"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "client"
+      }
+    }
   ]
 }
